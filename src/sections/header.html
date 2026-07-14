@@ -1,4 +1,31 @@
-<div>
-    <h1 class="text-blue-800">Header</h1>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quibusdam.</p>
-</div>
+<header class="text-black m-4 font-[Outfit]">
+    <div class="flex justify-between items-start">
+
+        <div class="text-sm">
+            <ul>
+                <li>DE</li>
+                <li>EN</li>
+            </ul>
+        </div>
+
+       
+        <div class="text-xl font-bold">
+            <h1>Baumeister</h1>
+        </div>
+
+        <nav class="hidden flex-col items-center mt-12 font-bold text-green-800 gap-6 text-sm lg:flex lg:flex-col lg:items-end lg:gap-0 lg:mt-0 lg:text-black lg:font-normal">            
+            <a href="#about">About</a>
+            <a href="#service">Services</a>
+            <a href="#references">References</a>
+            <a href="#contact">Contact</a>
+        </nav>
+
+       
+        <button id="menu-btn" class="w-8 h-6 lg:hidden">
+            <img src="/menu1.png">
+        </button>
+        <button id="close-btn" class="w-8 h-6 hidden lg:hidden">
+            <img src="/close.png">
+        </button>
+    </div>
+</header>
