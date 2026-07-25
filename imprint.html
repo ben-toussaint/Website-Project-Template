@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/dist/output.css" />
+    <title>Website project template</title>
+  </head>
+  <script>
+    const loadComponents = (id, url) => {
+      fetch(url)
+        .then((response) => response.text())
+        .then((html) => {
+          document.getElementById(id).innerHTML = html;
+        });
+    };
+
+    window.onload = () => {
+      loadComponents("header", "src/sections3/header.html");
+      loadComponents("contact", "src/sections3/contact.html");
+      loadComponents("footer", "src/sections3/footer.html");
+    };
+  </script>
+  <body>
+    <div id="header"></div>
+    <div id="contact"></div>
+    <div id="footer"></div>
+  </body>
+</html>
