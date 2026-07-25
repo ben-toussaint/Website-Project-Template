@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/dist/output.css" />
     <title>Website project template</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
+  <script src="src/js/shape-scroll-animation.js"></script>
   <script>
     const loadComponents = (id, url) => {
-      fetch(url)
+      return fetch(url)
         .then((response) => response.text())
         .then((html) => {
           document.getElementById(id).innerHTML = html;
@@ -17,7 +19,9 @@
 
     window.onload = () => {
       loadComponents("header", "src/sections/header.html");
-      loadComponents("hero", "src/sections/hero.html");
+      loadComponents("hero", "src/sections/hero.html").then(() =>
+        window.initShapeScrollAnimation(),
+      );
       loadComponents("contact", "src/sections/contact.html");
       loadComponents("footer", "src/sections/footer.html");
     };
