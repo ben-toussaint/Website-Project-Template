@@ -23,6 +23,17 @@
  *     at which point Red pins - and that pin is what releases Small-green.
  *  5. Red only holds for RED_SELF_RELEASE_PX of extra scroll before
  *     releasing itself and continuing on normally.
+ *  6. Pink pins the same way as the others in step 1, and (like Red)
+ *     only holds for PINK_SELF_RELEASE_PX of extra scroll before
+ *     releasing itself and continuing on normally.
+ *
+ * All of the above is now fully SCROLL-REVERSIBLE: every pin/release
+ * decision is recomputed from the current scroll position on every
+ * frame (instead of being a one-shot, one-way latch). That means
+ * scrolling back up retraces exactly the same path in reverse - a
+ * shape that pinned on the way down will re-pin on the way back up if
+ * you cross its trigger point again, and nothing is ever left
+ * permanently stuck.
  *
  * HOW TO WIRE THIS INTO YOUR MARKUP
  * ------------------------------------------------------------
@@ -52,6 +63,7 @@
   var STICK_OFFSET = 0; // px from viewport top counted as "touching"
   var BLUE_RELEASE_GAP = 8; // px: how close big-green's tip must get to free blue
   var RED_SELF_RELEASE_PX = 8; // px of extra scroll red holds before freeing itself
+  var PINK_SELF_RELEASE_PX = 8; // px of extra scroll pink holds before freeing itself
 
   var initialized = false;
   var pending = false;
@@ -77,16 +89,18 @@
     var container = document.querySelector("[data-shapes-container]");
     if (!container) return false; // shapes not in the DOM yet - caller can retry later
 
-    // state machine per shape:
-    //   'normal' - in-flow, scrolling naturally, eligible to pin
+    // state per shape:
+    //   'normal' - in-flow, scrolling naturally
     //   'stuck'  - pinned to the top of the viewport
-    //   'done'   - has been released, back in normal flow, will never pin again
+    // Note there is deliberately no 'done'/latched state any more - every
+    // shape can move freely between 'normal' and 'stuck' in either
+    // direction, which is what makes the animation reversible.
     var shapes = {};
     container.querySelectorAll("[data-shape]").forEach(function (el) {
       shapes[el.dataset.shape] = {
         el: el,
         state: "normal",
-        stuckAtScrollY: 0,
+        docTop: 0, // absolute (document) top, captured once while normal
         leftPct: 0,
         widthPct: 0,
       };
@@ -111,21 +125,35 @@
       return false;
     }
 
-    // left/width as a % of the container never change with scroll (only the
-    // vertical position does) - capture them once, before anything pins, so
-    // we can correctly re-pin on resize later.
+    // docTop/leftPct/widthPct as a % of the container never change with
+    // scroll - only the shape's on-screen position does. Capture them once
+    // (per shape, while it's not pinned) so we can always work out where a
+    // shape *would* naturally be for any given scrollY, even while it's
+    // currently pinned.
     function captureGeometry() {
       var cRect = container.getBoundingClientRect();
+      var scrollY = window.scrollY;
       Object.keys(shapes).forEach(function (key) {
         var s = shapes[key];
-        if (s.state !== "normal") return;
+        if (s.state !== "normal") return; // can't measure a pinned shape's natural spot
         var r = s.el.getBoundingClientRect();
+        s.docTop = r.top + scrollY;
         s.leftPct = (r.left - cRect.left) / cRect.width;
         s.widthPct = r.width / cRect.width;
       });
     }
 
+    // Where this shape's top edge would be, right now, if it were NOT
+    // pinned. This is the single source of truth every pin/release
+    // decision is based on, which is what makes the whole thing
+    // reversible: it's just a function of the current scroll position,
+    // never a one-way memory of "what already happened".
+    function naturalTip(shape) {
+      return shape.docTop - window.scrollY;
+    }
+
     function pin(shape) {
+      if (shape.state === "stuck") return;
       var cRect = container.getBoundingClientRect();
       shape.el.style.position = "fixed";
       shape.el.style.top = STICK_OFFSET + "px";
@@ -133,24 +161,19 @@
       shape.el.style.width = shape.widthPct * cRect.width + "px";
       shape.el.style.margin = "0";
       shape.state = "stuck";
-      shape.stuckAtScrollY = window.scrollY;
     }
 
     function release(shape) {
+      if (shape.state === "normal") return;
       shape.el.style.position = "";
       shape.el.style.top = "";
       shape.el.style.left = "";
       shape.el.style.width = "";
       shape.el.style.margin = "";
-      shape.state = "done";
-    }
-
-    function tipY(shape) {
-      return shape.el.getBoundingClientRect().top;
+      shape.state = "normal";
     }
 
     function update() {
-      var scrollY = window.scrollY;
       var y = shapes.yellow,
         p = shapes.pink,
         b = shapes.blue;
@@ -158,35 +181,51 @@
         bg = shapes["big-green"],
         r = shapes.red;
 
-      // 1) Yellow / Pink / Blue pin the instant their tip meets the top.
-      [y, p, b].forEach(function (s) {
-        if (s.state === "normal" && tipY(s) <= STICK_OFFSET) pin(s);
+      // Recompute, from scratch, whether each shape *should* be stuck
+      // right now. Because this is purely a function of current scroll
+      // position (via naturalTip), scrolling back up automatically
+      // retraces the same handoffs in reverse - nothing here "remembers"
+      // which direction we came from.
+      var wants = {
+        // 1) Pins the instant its tip meets the top; released the
+        //    instant small-green's tip meets the top.
+        yellow: naturalTip(y) <= STICK_OFFSET && naturalTip(sg) > STICK_OFFSET,
+
+        // 6) Pins the instant its tip meets the top; only holds for
+        //    PINK_SELF_RELEASE_PX of extra scroll, then frees itself.
+        pink:
+          naturalTip(p) <= STICK_OFFSET &&
+          naturalTip(p) > STICK_OFFSET - PINK_SELF_RELEASE_PX,
+
+        // 1) Pins the instant its tip meets the top; released once
+        //    big-green's tip gets within BLUE_RELEASE_GAP of the top.
+        blue:
+          naturalTip(b) <= STICK_OFFSET &&
+          naturalTip(bg) > STICK_OFFSET + BLUE_RELEASE_GAP,
+
+        // 2) Pins the instant its tip meets the top; released the
+        //    instant red's tip meets the top.
+        "small-green":
+          naturalTip(sg) <= STICK_OFFSET && naturalTip(r) > STICK_OFFSET,
+
+        // 3) Never pins.
+        "big-green": false,
+
+        // 4-5) Pins the instant its tip meets the top; only holds for
+        //    RED_SELF_RELEASE_PX of extra scroll, then frees itself.
+        red:
+          naturalTip(r) <= STICK_OFFSET &&
+          naturalTip(r) > STICK_OFFSET - RED_SELF_RELEASE_PX,
+      };
+
+      Object.keys(shapes).forEach(function (key) {
+        var s = shapes[key];
+        if (wants[key] && s.state !== "stuck") {
+          pin(s);
+        } else if (!wants[key] && s.state === "stuck") {
+          release(s);
+        }
       });
-
-      // 2) Small-green pins the instant its tip meets the top - releasing Yellow.
-      if (sg.state === "normal" && tipY(sg) <= STICK_OFFSET) {
-        pin(sg);
-        if (y.state === "stuck") release(y);
-      }
-
-      // 3) Big-green never pins; once its tip nears the top, Blue is freed.
-      if (b.state === "stuck" && tipY(bg) <= STICK_OFFSET + BLUE_RELEASE_GAP) {
-        release(b);
-      }
-
-      // 4) Red pins the instant its own tip meets the top - releasing Small-green.
-      if (r.state === "normal" && tipY(r) <= STICK_OFFSET) {
-        pin(r);
-        if (sg.state === "stuck") release(sg);
-      }
-
-      // 5) Red only holds a beat, then frees itself.
-      if (
-        r.state === "stuck" &&
-        scrollY - r.stuckAtScrollY >= RED_SELF_RELEASE_PX
-      ) {
-        release(r);
-      }
     }
 
     // rAF-throttled scroll handling.
