@@ -5,18 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/dist/output.css">
     <title>Website project template</title>
+    <script src="script.js" defer ></script>
 </head>
 <script>
-    const loadComponents = (id, url) =>  {
+    const loadComponents = (id, url, callback) =>  {
         fetch(url)
         .then((response) => response.text())
         .then((html) => {
             document.getElementById(id).innerHTML = html;
-        })
+            if(callback) callback();
+        });
     }
 
     window.onload = () => {
-        loadComponents('header', 'src/sections/header.html');
+        loadComponents('header', 'src/sections/header.html', initNav);
         loadComponents('hero', 'src/sections/hero.html');
         loadComponents('contact', 'src/sections/contact.html');
         loadComponents('footer', 'src/sections/footer.html');
@@ -27,5 +29,6 @@
     <div id="hero"></div>
     <div id="contact"></div>
     <div id="footer"></div>
+    <script src="./script.js"></script>
 </body>
 </html>
