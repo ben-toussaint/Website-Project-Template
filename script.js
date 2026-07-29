@@ -1,5 +1,5 @@
 
-function initNav() {
+/*function initNav() {
     const menuButton = document.getElementById('menu-btn');
     const closeButton = document.getElementById('close-btn');
     const mobileNav = document.getElementById('mobile-nav');
@@ -18,4 +18,11 @@ function initNav() {
         menuButton.classList.remove('hidden');
 
     })
-}
+*/
+
+function togglenav(){
+    const menuButton = document.getElementById('menu-btn');
+    const mobileNav=document.getElementById('mobile-nav');
+        mobileNav.classList.toggle('hidden')
+        menuButton.src= mobileNav.classList.contains('hidden') ? 'menu1.png' :'close.png'
+    }
