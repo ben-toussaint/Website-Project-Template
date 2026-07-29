@@ -4,14 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/dist/output.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
     <title>Website project template</title>
-    
   </head>
-  <script src="./script.js"></script>
-  <script src="src/js/shape-scroll-animation.js"></script>
   <script>
     const loadComponents = (id, url) => {
-      return fetch(url)
+      fetch(url)
         .then((response) => response.text())
         .then((html) => {
           document.getElementById(id).innerHTML = html;
@@ -19,19 +22,14 @@
     };
 
     window.onload = () => {
-      loadComponents("header", "src/sections/header.html");
-      loadComponents("hero", "src/sections/hero.html").then(() =>
-        window.initShapeScrollAnimation(),
-      );
-      loadComponents("contact", "src/sections/contact.html");
-      loadComponents("footer", "src/sections/footer.html");
+      loadComponents("header", "src/sections2/header.html");
+      loadComponents("body", "src/sections2/body.html");
+      loadComponents("footer", "src/sections2/footer.html");
     };
   </script>
   <body>
     <div id="header"></div>
-    <div id="hero"></div>
-    <div id="contact"></div>
+    <div id="body"></div>
     <div id="footer"></div>
-    
-</body>
+  </body>
 </html>

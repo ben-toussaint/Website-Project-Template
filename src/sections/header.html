@@ -1,41 +1,46 @@
-<header class= "fixed top-0 left-0 right-0 text-[#00672E] m-4 font-[Outfit]">
-    <div class="flex justify-between items-start">
+<header class="text-black m-4 sticky top-0">
+    <div class="flex justify-between items-start px-12">
 
         <div class="text-sm">
             <ul>
-                <li>DE</li>
-                <li>EN</li>
+                <li><button class="language-btn">DE</button></li>
+                <li><button class="language-btn">EN</button></li>
             </ul>
         </div>
 
-       
-        <div class=" bg-[url('../src/sections/asset/bg-w.png')]   bg-cover bg-no-repeat  text-lg font-semibold">
-            <h1>Baumeister</h1>
-        </div>
-
-        <nav id="desktop-nav" class="hidden flex-col items-center mt-12 font-bold text-[#00672E] gap-6 text-sm lg:flex lg:flex-col lg:items-end lg:gap-0 lg:mt-0 lg:text-[#00672E] lg:font-normal">            
-            <a href="#about">About</a>
-            <a href="#service">Services</a>
-            <a href="#references">References</a>
-            <a href="#contact">Contact</a>
-        </nav>
-
-       
-        <button  class="w-8 h-6 lg:hidden " >
-            <img src="src\sections\asset\navg.webp" onclick="togglenav()" id="menu-btn">
-        </button>
-        <button id="close-btn" class="w-8 h-6 hidden lg:hidden">
-            <img src="src\sections\asset\close.png">
-        </button>
+    <div
+      class="w-40 h-16 flex items-center justify-center text-xl font-bold bg-[url('/vector.png')] bg-no-repeat bg-contain lg:bg-none"
+    >
+      <h1>Baumeister</h1>
     </div>
 
-    
-  <nav id="mobile-nav" class="hidden flex  flex-col items-center mt-12 font-semibold text-green-800 gap-6 text-sm lg:hidden">            
-            <a href="#about">About</a>
-            <a href="#service">Services</a>
-            <a href="#references">References</a>
-            <a href="#contact">Contact</a>
-        </nav>  
-    
+    <nav
+      id="desktop-nav"
+      class="hidden flex-col items-center mt-12 font-bold text-green-800 gap-6 text-sm lg:flex lg:flex-col lg:items-end lg:gap-0 lg:mt-0 lg:text-black lg:font-normal"
+    >
+      <a href="#about">About</a>
+      <a href="#service">Services</a>
+      <a href="#references">References</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <button id="menu-btn" class="w-8 h-6 lg:hidden">
+      <img src="/menu1.png" />
+    </button>
+
+    <button id="close-btn" class="w-8 h-6 hidden lg:hidden">
+      <img src="/close.png" />
+    </button>
+  </div>
+
+  <nav
+    id="mobile-nav"
+    class="hidden flex-col items-center mt-12 font-semibold text-green-800 gap-6 text-sm lg:hidden"
+  >
+    <a href="#about">About</a>
+    <a href="#service">Services</a>
+    <a href="#references">References</a>
+    <a href="#contact">Contact</a>
+  </nav>
 </header>
 
