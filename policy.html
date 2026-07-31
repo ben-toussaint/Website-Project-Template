@@ -12,17 +12,19 @@
     />
     <title>Website project template</title>
   </head>
+  <script src="script.js" defer></script>
   <script>
-    const loadComponents = (id, url) => {
+    const loadComponents = (id, url,callback) => {
       fetch(url)
         .then((response) => response.text())
         .then((html) => {
           document.getElementById(id).innerHTML = html;
+          if (callback) callback();
         });
     };
 
     window.onload = () => {
-      loadComponents("header", "src/sections2/header.html");
+      loadComponents("header", "src/sections2/header.html", initNav);
       loadComponents("body", "src/sections2/body.html");
       loadComponents("footer", "src/sections2/footer.html");
     };
