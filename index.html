@@ -20,7 +20,7 @@
     };
 
     window.onload = () => {
-      loadComponents("header", "./src/sections/header.html", initNav);
+      loadComponents("header", "./src/sections/header.html", togglenav);
       loadComponents("hero", "./src/sections/hero.html").then(() =>
         window.initShapeScrollAnimation(),
       );
