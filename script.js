@@ -1,5 +1,5 @@
 
-function initNav() {
+function toggleNav() {
     const menuButton = document.getElementById('menu-btn');
     const closeButton = document.getElementById('close-btn');
     const mobileNav = document.getElementById('mobile-nav');
