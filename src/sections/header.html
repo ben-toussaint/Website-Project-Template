@@ -1,41 +1,47 @@
 <div class="relative">
-<header class="text-black mt-4 fixed top-0 z-50 w-full">
+  <header class="text-black mt-4 fixed top-0 z-50 w-full">
     <div class="flex justify-between items-center px-6">
+      <div class="font-medium text-base leading-relaxed">
+        <ul>
+          <li><button class="language-btn">DE</button></li>
+          <li><button class="language-btn">EN</button></li>
+        </ul>
+      </div>
 
-        <div class="font-medium text-base leading-relaxed">
-            <ul>
-                <li><button class="language-btn">DE</button></li>
-                <li><button class="language-btn">EN</button></li>
-            </ul>
-        </div>
+      <div
+        class="w-40 h-16 flex items-center justify-center font-bold bg-[url('/vector.png')] bg-no-repeat bg-contain lg:bg-none"
+      >
+        <h1 class="text-2xl md:text-4xl lg:text-5xl text-center">Baumeister</h1>
+      </div>
 
-       
-        <div class="w-40 h-16 flex items-center justify-center font-bold bg-[url('/vector.png')] bg-no-repeat bg-contain lg:bg-none">
-            <h1 class="text-2xl md:text-4xl lg:text-5xl text-center">Baumeister</h1>
-        </div>
+      <nav
+        id="desktop-nav"
+        class="hidden flex-col items-center mt-12 font-semibold text-[25px] leading-relaxed gap-6 lg:flex lg:flex-col lg:items-end lg:gap-0 lg:mt-0 lg:text-black lg:font-normal"
+      >
+        <a href="#about">About</a>
+        <a href="#service">Services</a>
+        <a href="#references">References</a>
+        <a href="#contact">Contact</a>
+      </nav>
 
-        <nav id="desktop-nav" class="hidden flex-col items-center mt-12 font-semibold text-[25px] leading-relaxed gap-6 lg:flex lg:flex-col lg:items-end lg:gap-0 lg:mt-0 lg:text-black lg:font-normal">            
-            <a href="#about">About</a>
-            <a href="#service">Services</a>
-            <a href="#references">References</a>
-            <a href="#contact">Contact</a>
-        </nav>
+      <button id="menu-btn" class="w-8 h-6 lg:hidden">
+        <img src="menu1.png" />
+      </button>
 
-    <button id="menu-btn" class="w-8 h-6 lg:hidden">
-      <img src="/menu1.png" />
-    </button>
+      <button id="close-btn" class="w-8 h-6 hidden lg:hidden">
+        <img src="close.png" />
+      </button>
+    </div>
 
-    <button id="close-btn" class="w-8 h-6 hidden lg:hidden">
-      <img src="close.png" />
-    </button>
-  </div>
-
-    <nav id="mobile-nav" class="hidden flex-col items-center mt-12 font-medium w-full z-50 text-green-800 gap-6 sm:text-2xl lg:hidden text-3xl">            
-            <a href="#about">About</a>
-            <a href="#service">Services</a>
-            <a href="#references">References</a>
-            <a href="#contact">Contact</a>
-        </nav>
-</header>
-<div class="h-16 mb-24"></div>
+    <nav
+      id="mobile-nav"
+      class="hidden flex-col items-center mt-12 font-medium w-full z-50 text-green-800 gap-6 sm:text-2xl lg:hidden text-3xl"
+    >
+      <a href="#about">About</a>
+      <a href="#service">Services</a>
+      <a href="#references">References</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+  <div class="h-16 mb-24"></div>
 </div>
