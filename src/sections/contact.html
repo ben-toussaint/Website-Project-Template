@@ -1,3 +1,13 @@
+<style>
+  /* Added to avoid Tailwind purge removing arbitrary bg-[url(...)] class */
+  .references-bg {
+    background-image: url('/Asset/Rectangle.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+</style>
+
 <div
   class="flex flex-col items-center justify-center min-h-screen gap-4 text-center mt-60"
 >
@@ -61,7 +71,7 @@
 </div>
 
 <div
-  class="bg-[url('/Asset/Rectangle.png')] h-auto bg-cover bg-center bg-no-repeat"
+  class="references-bg h-auto"
 >
   <div
     id="references"
