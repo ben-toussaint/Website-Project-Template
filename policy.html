@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/dist/output.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Website project template</title>
+  </head>
+  <script src="script.js" defer></script>
+  <script>
+    const loadComponents = (id, url,callback) => {
+      fetch(url)
+        .then((response) => response.text())
+        .then((html) => {
+          document.getElementById(id).innerHTML = html;
+          if (callback) callback();
+        });
+    };
+
+    window.onload = () => {
+      loadComponents("header", "src/sections2/header.html", togglenav);
+      loadComponents("body", "src/sections2/body.html");
+      loadComponents("footer", "src/sections2/footer.html");
+    };
+  </script>
+  <body class="bg-[#EFECEA]">
+    <div id="header"></div>
+    <div id="body"></div>
+    <div id="footer"></div>
+  </body>
+</html>
