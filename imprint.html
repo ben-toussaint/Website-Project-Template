@@ -8,21 +8,22 @@
     <title>Website project template</title>
   </head>
   <script>
-    const loadComponents = (id, url) => {
+    const loadComponents = (id, url, callback) => {
       fetch(url)
         .then((response) => response.text())
         .then((html) => {
           document.getElementById(id).innerHTML = html;
+          if (callback) callback();
         });
     };
 
     window.onload = () => {
-      loadComponents("header", "src/sections3/header.html");
+      loadComponents("header", "src/sections3/header.html",togglenav);
       loadComponents("contact", "src/sections3/contact.html");
       loadComponents("footer", "src/sections3/footer.html");
     };
   </script>
-  <body>
+  <body class="bg-[#EFECEA]">
     <div id="header"></div>
     <div id="contact"></div>
     <div id="footer"></div>
